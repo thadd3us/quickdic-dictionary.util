@@ -14,8 +14,6 @@
 
 package com.hughes.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,11 +28,13 @@ import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public final class FileUtil {
   
-  public static void writeObject(final Serializable o, final File file) throws FileNotFoundException, IOException {
-    final ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+  public static void writeObject(final Object o, final File file) throws FileNotFoundException, IOException {
+    final ObjectOutputStream oos = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
     oos.writeObject(o);
     oos.close();
   }
@@ -44,7 +44,7 @@ public final class FileUtil {
   }
 
   public static Object readObject(final File file) throws IOException, ClassNotFoundException {
-    final ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+    final ObjectInputStream ois = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
     final Object result = ois.readObject();
     ois.close();
     return result;
